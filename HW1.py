@@ -110,3 +110,17 @@ def SameKeysTwoDicts(dict1, dict2):
     return(SameKeys)
 print(SameKeysTwoDicts(dict_one, dict_two))
 
+# 4) Сгенерировать dict() из списка ключей ниже по формуле (key : key* key).
+# keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# ожидаемый результат: {1: 1, 2: 4, 3: 9 …}
+
+keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+def SquareDictFromKeysList(keys):
+    values = []
+    for key in keys:
+        value = key ** 2
+        values.append(value)
+    SquareDict = dict(zip(keys, values))
+    return(SquareDict)
+print(SquareDictFromKeysList(keys))
+
