@@ -21,7 +21,7 @@ keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 InitialArray = [10, 11, 2, 3, 5, 8, 23, 11, 2, 5, 76, 43, 2, 32, 76, 3, 10, 0, 1]
 # 1.1) убрать из него повторяющиеся элементы
 NoDuplicateArray = list(set(InitialArray))
-# print(NoDuplicateArray)
+print(NoDuplicateArray)
 
 # The function to check that we were right
 def FindDuplicateInArray(TheArray):
@@ -50,3 +50,28 @@ def NMaxElents(HowManyElements, TheArray):
     return(print(MaxNumbersList))
 
 NMaxElents(3, InitialArray)
+
+# 1.3) вывести индекс минимального элемента массива
+def ShowMinIndexOfArray(TheArray):
+    MinValueInArray = min(TheArray)
+    TargetElementQty = TheArray.count(MinValueInArray)
+    if TargetElementQty == 1:
+        MinIndex = TheArray.index(MinValueInArray)
+        return(print(MinIndex))
+    else: # .count shouldn't return a negative value, so no extra 'if > 1' needed
+        return(print("There are several indexes of the minimal element; it is out of the current scope!"))
+
+        """ Possible solution of the multiple minimal elements in the array
+        MinIndexList
+        while bool(TargetElementQty) = True
+        TargetElementQty -= 1
+        MinIndex = TheArray.index(MinValueInArray)
+        MinIndexList.append(MinIndex)
+        0) we cannot just `TheArray.remove(MinValueInArray)` or `TheArray.pop(MinIndex)`
+        because indexes after the first one will be shifted (#2 by 1, #3 by 2, et.c.) 
+        1) So we need to make a correction fro this shift
+        2) OR to replace already found positions by unique values (ideally not from TheArray, but at least any != MinValueInArray)
+        """
+
+ShowMinIndexOfArray(InitialArray)
+
