@@ -21,6 +21,7 @@ keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 InitialArray = [10, 11, 2, 3, 5, 8, 23, 11, 2, 5, 76, 43, 2, 32, 76, 3, 10, 0, 1]
 # 1.1) убрать из него повторяющиеся элементы
 NoDuplicateArray = list(set(InitialArray))
+print("1.1 No duplicates array")
 print(NoDuplicateArray)
 
 # The function to check that we were right
@@ -36,7 +37,6 @@ def FindDuplicateInArray(TheArray):
                 return
             # print("--------------")
     print("No duplicates were found")
-# Checkign process
 # FindDuplicateInArray(NoDuplicateArray)
 
 # 1.2) вывести 3 наибольших числа из исходного массива
@@ -48,7 +48,7 @@ def NMaxElents(HowManyElements, TheArray):
         MaxNumbersList.append(max(NoDuplicateArray))
         NoDuplicateArray.remove(max(NoDuplicateArray))
     return(print(MaxNumbersList))
-
+print("1.2 Three max values of the array")
 NMaxElents(3, InitialArray)
 
 # 1.3) вывести индекс минимального элемента массива
@@ -72,18 +72,21 @@ def ShowMinIndexOfArray(TheArray):
         1) So we need to make a correction fro this shift
         2) OR to replace already found positions by unique values (ideally not from TheArray, but at least any != MinValueInArray)
         """
-
+print("1.3 The index of the smallest value of the array")
 ShowMinIndexOfArray(InitialArray)
 
 #1.4) вывести исходный массив в обратном порядке
 # Option 1
 InitialArray.reverse()
+print("1.4 reversed array; Option 1")
 print(InitialArray)
 InitialArray.reverse() # don't forget to change it back!
 # Option 2
 ReversedInitialArray = list(reversed(InitialArray))
+print("1.4 reversed array; Option 2")
 print(ReversedInitialArray)
 # Option 3
+print("1.4 reversed array; Option 3")
 print(InitialArray[::-1])
 
 #2) Сгенерировать массив(list()). Из диапазона чисел от 0 до 100 записать в результирующий массив только четные числа.
@@ -94,7 +97,8 @@ def EvenArrayGenerator(Start, Finish):
             EvenArray.append(i)
     return(EvenArray)
 EvenArrayGenerator(0,100)
-# print(EvenArrayGenerator(0,100))
+print("2. Only even array from 0 to 100")
+print(EvenArrayGenerator(0,100))
 
 # 3) Найти общие ключи в двух словарях:
 dict_one = { 'a': 1, 'b': 2, 'c': 3,  'd': 4 }
@@ -108,6 +112,7 @@ def SameKeysTwoDicts(dict1, dict2):
             if CompareItem == TargetItem:
                 SameKeys.append(CompareItem)
     return(SameKeys)
+print("3. The same keys of two dictioanaries")
 print(SameKeysTwoDicts(dict_one, dict_two))
 
 # 4) Сгенерировать dict() из списка ключей ниже по формуле (key : key* key).
@@ -122,5 +127,6 @@ def SquareDictFromKeysList(keys):
         values.append(value)
     SquareDict = dict(zip(keys, values))
     return(SquareDict)
+print("4. Dict with value = key ** 2")
 print(SquareDictFromKeysList(keys))
 
