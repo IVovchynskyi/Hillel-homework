@@ -95,3 +95,18 @@ def EvenArrayGenerator(Start, Finish):
     return(EvenArray)
 EvenArrayGenerator(0,100)
 # print(EvenArrayGenerator(0,100))
+
+# 3) Найти общие ключи в двух словарях:
+dict_one = { 'a': 1, 'b': 2, 'c': 3,  'd': 4 }
+dict_two = { 'a': 6,  'b': 7, 'z': 20, 'x': 40 }
+def SameKeysTwoDicts(dict1, dict2):
+    dict_one_keys = dict_one.keys()
+    dict_two_keys = dict_two.keys()
+    SameKeys = []
+    for CompareItem in dict_one_keys:
+        for TargetItem in dict_two_keys:
+            if CompareItem == TargetItem:
+                SameKeys.append(CompareItem)
+    return(SameKeys)
+print(SameKeysTwoDicts(dict_one, dict_two))
+
