@@ -75,3 +75,13 @@ def ShowMinIndexOfArray(TheArray):
 
 ShowMinIndexOfArray(InitialArray)
 
+#1.4) вывести исходный массив в обратном порядке
+# Option 1
+InitialArray.reverse()
+print(InitialArray)
+InitialArray.reverse() # don't forget to change it back!
+# Option 2
+ReversedInitialArray = list(reversed(InitialArray))
+print(ReversedInitialArray)
+# Option 3
+print(InitialArray[::-1])
