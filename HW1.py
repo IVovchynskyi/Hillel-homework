@@ -24,7 +24,7 @@ NoDuplicateArray = list(set(InitialArray))
 # print(NoDuplicateArray)
 
 # The function to check that we were right
-def DuplicateInArray(TheArray):
+def FindDuplicateInArray(TheArray):
     while bool(TheArray) is True:
         ComparisonTarget = TheArray.pop()
         # print (ComparisonTarget)
@@ -37,6 +37,16 @@ def DuplicateInArray(TheArray):
             # print("--------------")
     print("No duplicates were found")
 # Checkign process
-# DuplicateInArray(NoDuplicateArray)
+# FindDuplicateInArray(NoDuplicateArray)
 
+# 1.2) вывести 3 наибольших числа из исходного массива
+def NMaxElents(HowManyElements, TheArray):
+    MaxNumbersList = []
+    NoDuplicateArray = list(set(TheArray))  # to avoid the "76, 76, 43" answer
+    while bool(HowManyElements) is True:
+        HowManyElements -= 1
+        MaxNumbersList.append(max(NoDuplicateArray))
+        NoDuplicateArray.remove(max(NoDuplicateArray))
+    return(print(MaxNumbersList))
 
+NMaxElents(3, InitialArray)
