@@ -85,3 +85,13 @@ ReversedInitialArray = list(reversed(InitialArray))
 print(ReversedInitialArray)
 # Option 3
 print(InitialArray[::-1])
+
+#2) Сгенерировать массив(list()). Из диапазона чисел от 0 до 100 записать в результирующий массив только четные числа.
+def EvenArrayGenerator(Start, Finish):
+    EvenArray = []
+    for i in range(Start, Finish + 1, 1):
+        if i % 2 == 0:
+            EvenArray.append(i)
+    return(EvenArray)
+EvenArrayGenerator(0,100)
+# print(EvenArrayGenerator(0,100))
