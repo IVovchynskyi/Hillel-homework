@@ -80,4 +80,79 @@ I still think that the first option is better because it "picks up" the string l
 print("Here it was: ", random_line)
 print("Here it became: ", consonants_to_vowels_2(random_line))
 
+# 3) У вас есть последовательность строк. Необходимо определить наиболее часто встречающуюся строку в последовательности.
+# most_frequent(['a', 'a', 'bi', 'bi', 'bi']) == 'bi'
 
+# сделать функцию генератор входных данных
+# количество стрингов: конкретное значение или от X до Y
+# длина стрингов:  конкретное значение или от X до Y
+
+def third_task_input_generator(total_min_qty, total_max_qty, string_min_length, string_max_length, string_min_iteration, string_max_iteration):
+    """
+    generates list of strings with defined length and qty limitations; all generated strings should be placed randomly
+    into the output list
+    :param total_min_qty: minimal qty of strings (how many strings in general do we need)
+    :param total_max_qty: maximal qty of strings (how many strings in general do we need)
+    :param string_min_iteration: minimal qty of strings (how many strings copies are allowed)
+    :param string_max_iteration: maximal qty of strings (how many strings copies are allowed)
+    :param string_min_length: minimal string_min_length of strings
+    :param string_max_length: maximal string_min_length of strings
+    :return:list of generated strings
+    """
+    # initial checking
+    # YES it is shitty, I should add some functions here to avoid copying the same code
+    if total_min_qty <= 0:
+        print(f"\r\nMIN qty ({total_min_qty}) cannot be negative or equal to 0")
+        return
+    if total_min_qty > total_max_qty:
+        print(f"\r\nMIN ({total_min_qty}) cannot be bigger than MAX({total_max_qty}); watch requested string qty!")
+        return
+    if string_min_length <= 0:
+        print(f"\r\nMIN length ({string_min_length}) cannot be negative or equal to 0")
+        return
+    if string_min_length > string_max_length:
+        print(f"\r\nMIN ({string_min_length}) cannot be bigger than MAX ({string_max_length})")
+        return
+    if string_min_iteration <= 0:
+        print(f"\r\nMIN iteration number ({string_min_iteration}) cannot be negative or equal to 0")
+        return
+    if string_min_iteration > string_max_iteration:
+        print(f"\r\nMIN ({string_min_iteration}) cannot be bigger than MAX ({string_max_iteration})")
+        return
+
+    # let's generate necessary variables from the obtained input
+    the_output_list = []
+    import random, string
+    string_qty = random.randint(total_min_qty, total_max_qty)
+    print(f"randomized total number of strings is {string_qty}")
+    while string_qty:
+        string_qty -= 1
+        # the one below seems to be an extra variable, but it makes understanding much easier
+        current_string_length = random.randint(string_min_length, string_max_length)
+        current_string = "".join(random.choices(string.ascii_letters + string.digits, k = current_string_length))
+        print(f"with length of {current_string_length} the string is {current_string}")
+        # let's randomly insert (yes, for the first string is it useless, but all after it is good)
+        # the one below seems to be an extra variable, but it makes understanding much easier
+        iteration_qty = random.randint(string_min_iteration, string_max_iteration)
+        print(f"randomized iteration qty is {iteration_qty}")
+        while iteration_qty:
+            iteration_qty -= 1
+            # the one below is complitely extra; i just want to have nice print() for refactoring
+            if len(the_output_list) == 0:
+                insert_position = 0
+            else:
+                insert_position = random.randint(0, len(the_output_list) - 1)
+            the_output_list.insert(insert_position, current_string)
+            print(f"The string {current_string} is inserted to {insert_position}; iterations left {iteration_qty}")
+            print(f"output now is {the_output_list}")
+
+third_task_input_generator(2, 5, 3, 7, 2, 6)
+
+
+
+
+# а что если строк с максимальным числом несколько?
+
+# import random
+# print(random.randint(2,2))
+# print(random.randint(3,5))
