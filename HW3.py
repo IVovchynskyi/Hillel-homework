@@ -44,16 +44,16 @@ def consonants_to_vowels_1(the_string):
     :return: returns initial string and the string with consonant changed to vowels
     """
     import random
-    Vowels = ("A", "E", "I", "O", "U")
-    Consonants = (
+    VOWELS = ("A", "E", "I", "O", "U")
+    CONSONANTS = (
     "B", "C", "D", "F", "G", "J", "K", "L", "M", "N", "P", "Q", "S", "T", "V", "X", "Z", "H", "R", "W", "Y")
     list_to_join = []
     for letter in list(the_string.upper()):
-        if letter in Consonants:  # check for consonants
-            list_to_join.append(random.choice(Vowels))  # change a consonant to a random vowel and add to the list
+        if letter in CONSONANTS:  # check for consonants
+            list_to_join.append(random.choice(VOWELS))  # change a consonant to a random vowel and add to the list
         else:  # not-consonant just go through
             list_to_join.append(letter)  # add them to the list
-    return ("".join(list_to_join))  # transfer produced list back to string
+    return "".join(list_to_join)  # transfer produced list back to string
 
 
 print("""#1
@@ -61,4 +61,23 @@ Option 1
 (!) This solution was made before any hints""")
 print("Here it was: ", random_line)
 print("Here it became: ", consonants_to_vowels_1(random_line))
+
+
+consonants = "bcdfghjklmnpqrstvwxyz"
+vowels = "aeiou"
+
+def consonants_to_vowels_2(the_string):
+    import random
+    for the_consonant in consonants:
+        # print(the_string)
+        the_string = the_string.lower().replace(the_consonant, random.choice(vowels), random_line.count(the_consonant))
+    return the_string
+
+print("""#1
+Option 2
+The option 2 was made after I heard about the find(), so I decided to use it
+I still think that the first option is better because it "picks up" the string less times""")
+print("Here it was: ", random_line)
+print("Here it became: ", consonants_to_vowels_2(random_line))
+
 
