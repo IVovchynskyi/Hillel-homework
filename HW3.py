@@ -80,6 +80,49 @@ I still think that the first option is better because it "picks up" the string l
 print("Here it was: ", random_line)
 print("Here it became: ", consonants_to_vowels_2(random_line))
 
+# 2.1) отсортировать массив из словарей по значению ключа ‘age'
+def sort_by_age(list_of_dicts):
+    return sorted(list_of_dicts, key=lambda dict_elem: dict_elem['age'])
+print(f""" #2.1
+I'm still not big fan of lambdas, probably I need to rewrite it using an ordinary function
+BTW there is no honor in this solution because I took it from https://tproger.ru/translations/python-sorting/
+2.1 answer is:
+{sort_by_age(data)}""")
+
+# 2.2) сгруппировать данные по значению ключа 'city'
+# вывод должен быть такого вида :
+# result = {
+#   'Kiev': [
+#    {'name': 'Viktor', 'age': 30 },
+#    {'name': 'Andrey', 'age': 34}],
+
+#   'Dnepr': [ {'name': 'Maksim', 'age': 20 },
+#        {'name': 'Artem', 'age': 50}],
+#   'Lviv': [ {'name': 'Vladimir', 'age': 32 },
+#        {'name': 'Dmitriy', 'age': 21}]
+# }
+
+print("""
+#2.2 is WRONG
+I don't know why `result[element['city']].append({'name':element['name'], 'age':element['age']})`
+appends to ALL THREE cities, not only to result[element['city']]
+""")
+cities=[]
+for element in data:
+    cities.append(element['city'])
+result = dict.fromkeys(set(cities),[])
+print("---------------")
+print(f"initial result is {result}")
+data_copy = data[:]
+for element in data_copy:
+    print(f"element is {element}")
+    print(f"element['city'] is {element['city']}")
+    print(f"result[element['city']] is {result[element['city']]}")
+    result[element['city']].append({'name':element['name'], 'age':element['age']})
+    data_copy.remove(element)
+    print(f"result is {result}")
+    print(f"-----------------")
+# print(result)
 # 3) У вас есть последовательность строк. Необходимо определить наиболее часто встречающуюся строку в последовательности.
 # most_frequent(['a', 'a', 'bi', 'bi', 'bi']) == 'bi'
 
@@ -170,3 +213,38 @@ print("""#3
 (list output is on purpose; to handle cases with several most often strings)""")
 print(f"#3 with separate function generated input: {most_frequent(third_task_input_generator(4, 8, 3, 6, 4, 5))}")
 print(f"#3 with input from the example: {most_frequent(['a', 'a', 'bi', 'bi', 'bi'])}")
+
+
+# 2
+# 2) Дан массив из словарей
+# data = [
+#   {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
+#   {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
+#   {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
+#   {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
+#   {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
+#   {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
+#
+# 2.1) отсортировать массив из словарей по значению ключа ‘age'
+# # use sorted()
+# 2.2) сгруппировать данные по значению ключа 'city'
+# вывод должен быть такого вида :
+# result = {
+#   'Kiev': [
+#    {'name': 'Viktor', 'age': 30 },
+#    {'name': 'Andrey', 'age': 34}],
+#
+#   'Dnepr': [ {'name': 'Maksim', 'age': 20 },
+#        {'name': 'Artem', 'age': 50}],
+#   'Lviv': [ {'name': 'Vladimir', 'age': 32 },
+#        {'name': 'Dmitriy', 'age': 21}]
+# }
+
+data = [
+  {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
+  {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
+  {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
+  {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
+  {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
+  {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
+
