@@ -100,7 +100,7 @@ def third_task_input_generator(total_min_qty, total_max_qty, string_min_length, 
     :return:list of generated strings
     """
     # initial checking
-    # YES it is shitty, I should add some functions here to avoid copying the same code
+    # (!) YES it is shitty, I should add some functions here to avoid copying the same code, but it is 2AM and I'm tired as f*ck
     if total_min_qty <= 0:
         print(f"\r\nMIN qty ({total_min_qty}) cannot be negative or equal to 0")
         return
@@ -124,17 +124,17 @@ def third_task_input_generator(total_min_qty, total_max_qty, string_min_length, 
     the_output_list = []
     import random, string
     string_qty = random.randint(total_min_qty, total_max_qty)
-    print(f"randomized total number of strings is {string_qty}")
+    # print(f"randomized total number of strings is {string_qty}")
     while string_qty:
         string_qty -= 1
         # the one below seems to be an extra variable, but it makes understanding much easier
         current_string_length = random.randint(string_min_length, string_max_length)
         current_string = "".join(random.choices(string.ascii_letters + string.digits, k = current_string_length))
-        print(f"with length of {current_string_length} the string is {current_string}")
+        # print(f"with length of {current_string_length} the string is {current_string}")
         # let's randomly insert (yes, for the first string is it useless, but all after it is good)
         # the one below seems to be an extra variable, but it makes understanding much easier
         iteration_qty = random.randint(string_min_iteration, string_max_iteration)
-        print(f"randomized iteration qty is {iteration_qty}")
+        # print(f"randomized iteration qty is {iteration_qty}")
         while iteration_qty:
             iteration_qty -= 1
             # the one below is complitely extra; i just want to have nice print() for refactoring
@@ -143,16 +143,32 @@ def third_task_input_generator(total_min_qty, total_max_qty, string_min_length, 
             else:
                 insert_position = random.randint(0, len(the_output_list) - 1)
             the_output_list.insert(insert_position, current_string)
-            print(f"The string {current_string} is inserted to {insert_position}; iterations left {iteration_qty}")
-            print(f"output now is {the_output_list}")
+            # print(f"The string {current_string} is inserted to {insert_position}; iterations left {iteration_qty}")
+            # print(f"output now is {the_output_list}")
+    return(the_output_list)
+# third_task_input_generator(2, 5, 3, 7, 2, 6)
 
-third_task_input_generator(2, 5, 3, 7, 2, 6)
+#3
+def most_frequent(the_list):
+    # let's do it via dicts because we might need to show more detailed statistics in future
+    pass
 
-
-
-
-# а что если строк с максимальным числом несколько?
-
-# import random
-# print(random.randint(2,2))
-# print(random.randint(3,5))
+input_list = third_task_input_generator(3, 5, 3, 6, 4, 7)
+# print(input_list)
+count_dict = dict.fromkeys(set(input_list)) # all unique strings are dict keys now
+for key in count_dict.keys(): # in other words: by every unique string of the list
+    # string_qty = input_list.count(key)
+    # print(f"the string {key} was found {string_qty} times")
+    # according to https://stackoverflow.com/questions/15456158/python-dict-update-vs-subscript-to-add-a-single-key-value-pair
+    #-> dict["key"] = value is faster than dict.update({"key":value})
+    count_dict[key] = input_list.count(key)
+# print(count_dict)
+the_biggest_value = max(count_dict.values())
+the_biggest_value_qty = list(count_dict.values()).count(the_biggest_value)
+if the_biggest_value_qty > 1:
+    print(f"There are several ({the_biggest_value_qty}) strings with the most often value ({the_biggest_value}):")
+else:
+    print(f"there is the only one string with the most often value ({the_biggest_value}):")
+for key, value in count_dict.items():
+    if value == the_biggest_value:
+        print(key)
