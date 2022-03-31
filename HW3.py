@@ -151,24 +151,22 @@ def third_task_input_generator(total_min_qty, total_max_qty, string_min_length, 
 #3
 def most_frequent(the_list):
     # let's do it via dicts because we might need to show more detailed statistics in future
-    pass
-
-input_list = third_task_input_generator(3, 5, 3, 6, 4, 7)
-# print(input_list)
-count_dict = dict.fromkeys(set(input_list)) # all unique strings are dict keys now
-for key in count_dict.keys(): # in other words: by every unique string of the list
-    # string_qty = input_list.count(key)
-    # print(f"the string {key} was found {string_qty} times")
-    # according to https://stackoverflow.com/questions/15456158/python-dict-update-vs-subscript-to-add-a-single-key-value-pair
-    #-> dict["key"] = value is faster than dict.update({"key":value})
-    count_dict[key] = input_list.count(key)
-# print(count_dict)
-the_biggest_value = max(count_dict.values())
-the_biggest_value_qty = list(count_dict.values()).count(the_biggest_value)
-if the_biggest_value_qty > 1:
-    print(f"There are several ({the_biggest_value_qty}) strings with the most often value ({the_biggest_value}):")
-else:
-    print(f"there is the only one string with the most often value ({the_biggest_value}):")
-for key, value in count_dict.items():
-    if value == the_biggest_value:
-        print(key)
+    count_dict = dict.fromkeys(set(the_list))
+    for key in count_dict.keys():
+        count_dict[key] = the_list.count(key)
+    the_biggest_value = max(count_dict.values())
+    the_biggest_value_qty = list(count_dict.values()).count(the_biggest_value)
+    # if the_biggest_value_qty > 1:
+    #     print(f"There are several ({the_biggest_value_qty}) strings with the most often value ({the_biggest_value}):")
+    # else:
+    #     print(f"there is the only one string with the most often value ({the_biggest_value}):")
+    most_often_keys = []
+    for key, value in count_dict.items():
+        if value == the_biggest_value:
+            most_often_keys.append(key)
+    # print(most_often_keys)
+    return most_often_keys
+print("""#3
+(list output is on purpose; to handle cases with several most often strings)""")
+print(f"#3 with separate function generated input: {most_frequent(third_task_input_generator(4, 8, 3, 6, 4, 5))}")
+print(f"#3 with input from the example: {most_frequent(['a', 'a', 'bi', 'bi', 'bi'])}")
