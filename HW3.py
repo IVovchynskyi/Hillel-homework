@@ -80,6 +80,41 @@ I still think that the first option is better because it "picks up" the string l
 print("Here it was: ", random_line)
 print("Here it became: ", consonants_to_vowels_2(random_line))
 
+
+
+
+# 2
+# 2) Дан массив из словарей
+# data = [
+#   {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
+#   {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
+#   {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
+#   {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
+#   {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
+#   {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
+#
+# 2.1) отсортировать массив из словарей по значению ключа ‘age'
+# # use sorted()
+# 2.2) сгруппировать данные по значению ключа 'city'
+# вывод должен быть такого вида :
+# result = {
+#   'Kiev': [
+#    {'name': 'Viktor', 'age': 30 },
+#    {'name': 'Andrey', 'age': 34}],
+#
+#   'Dnepr': [ {'name': 'Maksim', 'age': 20 },
+#        {'name': 'Artem', 'age': 50}],
+#   'Lviv': [ {'name': 'Vladimir', 'age': 32 },
+#        {'name': 'Dmitriy', 'age': 21}]
+# }
+
+data = [
+  {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
+  {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
+  {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
+  {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
+  {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
+  {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
 # 2.1) отсортировать массив из словарей по значению ключа ‘age'
 def sort_by_age(list_of_dicts):
     return sorted(list_of_dicts, key=lambda dict_elem: dict_elem['age'])
@@ -215,36 +250,4 @@ print(f"#3 with separate function generated input: {most_frequent(third_task_inp
 print(f"#3 with input from the example: {most_frequent(['a', 'a', 'bi', 'bi', 'bi'])}")
 
 
-# 2
-# 2) Дан массив из словарей
-# data = [
-#   {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
-#   {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
-#   {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
-#   {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
-#   {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
-#   {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
-#
-# 2.1) отсортировать массив из словарей по значению ключа ‘age'
-# # use sorted()
-# 2.2) сгруппировать данные по значению ключа 'city'
-# вывод должен быть такого вида :
-# result = {
-#   'Kiev': [
-#    {'name': 'Viktor', 'age': 30 },
-#    {'name': 'Andrey', 'age': 34}],
-#
-#   'Dnepr': [ {'name': 'Maksim', 'age': 20 },
-#        {'name': 'Artem', 'age': 50}],
-#   'Lviv': [ {'name': 'Vladimir', 'age': 32 },
-#        {'name': 'Dmitriy', 'age': 21}]
-# }
-
-data = [
-  {'name': 'Viktor', 'city': 'Kiev', 'age': 30 },
-  {'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
-  {'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
-  {'name': 'Andrey', 'city': 'Kiev', 'age': 34},
-  {'name': 'Artem', 'city': 'Dnepr', 'age': 50},
-  {'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
 
