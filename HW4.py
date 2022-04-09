@@ -82,3 +82,39 @@ def bulk_func(a):
     """
     return a * 3
 
+# *ЗАДАЧА-3
+# Написать декоратор который будет кешировать значения аргументов и результаты работы вашей функции и записывать
+# его в переменную cache. Если аргумента нет в переменной cache и функция выполняется, вывести сообщение
+# «Function executed with counter = {}, function result = {}» и количество раз сколько эта функция выполнялась.
+# Если значение берется из переменной cache, вывести сообщение «Used cache with counter = {}» и
+# количество раз обращений в cache.
+
+# There is no honor in this solution, it is mostly taken from the slide #19
+# https://docs.google.com/presentation/d/1GuEEkRKBUztYqJL_l1mDKhUE7lsZIywO82pAmtSLVHw/edit#slide=id.p19
+# and probably slide #22, but I have used https://devdreamz.com/question/254866-python-decorators-count-function-call instead
+# "Oh! these wicked times" :(
+
+def memorize(f):
+    cache = {}
+    def decorate(*args):
+        if args in cache:
+            decorate.old_calls += 1
+            print(f"Used cache with counter = {decorate.old_calls}")
+            # print(f"cache now is {cache}")
+            return cache[args]
+        else:
+            decorate.new_calls += 1
+            cache[args] = f(*args)
+            print(f"Function executed with counter = {decorate.new_calls}, function result = {cache[args]}")
+            return cache[args]
+
+    decorate.old_calls = 0
+    decorate.new_calls = 0
+    return decorate
+
+
+@memorize
+def f(a, b):
+    return a + b
+
+
