@@ -52,3 +52,33 @@ def division_reminder(dividend, divisor):
     return dividend % divisor
 
 
+# ЗАДАЧА-2
+# Написать декоратор который будет выполнять предпроверку типа аргумента который передается в вашу функцию.
+# Если это int, тогда выполнить функцию и вывести результат, если это str(),
+# тогда зарейзить ошибку ValueError (raise ValueError(“string type is not supported”))
+
+# Привет, по поводу задачи 2 в декораторах. По условию вы должны там рейзить ошибку, не смущайтесь когда вылетит трейсбек
+# с ошибкой  ValueError: string type is not supported. Так и задуманно
+
+
+def decorator_type_check(bulk_func):
+    def wrapper_around_original_function(*args, **kwargs):
+        pass
+        if isinstance(args[0], str):
+            print(bulk_func(*args, **kwargs))
+        elif isinstance(args[0], int):
+            raise ValueError("string type is not supported")
+        else:
+            print("it is not a string or a integer; I don't know what to do")
+
+    return (wrapper_around_original_function)
+
+@decorator_type_check
+def bulk_func(a):
+    """
+    the function able to process both int and str
+    :param a: some parameter
+    :return: a*3
+    """
+    return a * 3
+
