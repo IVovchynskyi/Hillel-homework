@@ -19,6 +19,12 @@ class ProcessInput:
     def __init__(self, a, b):
         self.a = a
         self.b = b
+        # try:
+        #     if isinstance(a, (float, int)) and isinstance(b, (float, int)):
+        #         self.a = a
+        #         self.b = b
+        # except:
+
 
     def add(self):
         return self.a + self.b
@@ -30,14 +36,19 @@ class ProcessInput:
         return self.a * self.b
 
     def divide(self):
-        return self.a / self.b
-
+        try:
+            return self.a / self.b
+        except ZeroDivisionError:
+            print("Fortunately or unfortunately, but you cannot devide by a zero")
     def divide_v2(self):
-        return int(self.a / self.b)
+        try:
+            return int(self.a / self.b)
+        except ZeroDivisionError:
+            print("Fortunately or unfortunately, but you cannot devide by a zero")
 
 
 
-proccess_input = ProcessInput(a=20, b=10)
+proccess_input = ProcessInput(a=20, b=0)
 print(proccess_input.add()) # выведет 30
 print(proccess_input.subtract()) # выведет 10
 print(proccess_input.multiple()) # выведет 200
