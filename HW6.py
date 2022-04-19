@@ -43,8 +43,15 @@ class IpProccessing:
         no_first_list = []
         for elem in self.ips:
             ip = elem.split('.')
-            no_first_list.append('.'.join(ip[1::]))
+            no_first_list.append('.'.join(ip[1:]))
         return no_first_list
+
+    def last_only(self):
+        last_only_list = []
+        for elem in self.ips:
+            ip = elem.split('.')
+            last_only_list.append(ip[-1])
+        return last_only_list
 
 
 ip_adresses = ["10.11.12.13", "10.11.12.14", "10.11.12.15"]
@@ -56,3 +63,6 @@ print(ip_proccessing.revers())
 # 2) Получить список IP адресов без первых октетов
 # (пример 0.11.12.13 -> 11.12.13)
 print(ip_proccessing.no_first())
+# 3) Получить список последних октетов IP адресов
+# (пример 10.11.12.13 -> 13)
+print(ip_proccessing.last_only())
