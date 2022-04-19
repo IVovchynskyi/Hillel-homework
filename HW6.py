@@ -39,6 +39,13 @@ class IpProccessing:
             revers_list.append('.'.join(ip[::-1]))
         return revers_list
 
+    def no_first(self):
+        no_first_list = []
+        for elem in self.ips:
+            ip = elem.split('.')
+            no_first_list.append('.'.join(ip[1::]))
+        return no_first_list
+
 
 ip_adresses = ["10.11.12.13", "10.11.12.14", "10.11.12.15"]
 ip_proccessing = IpProccessing(ip_adresses)
@@ -46,3 +53,6 @@ ip_proccessing = IpProccessing(ip_adresses)
 # 1) Получить список IP адресов в развернутом виде
 # (пример 10.11.12.13 -> 13.12.11.10)
 print(ip_proccessing.revers())
+# 2) Получить список IP адресов без первых октетов
+# (пример 0.11.12.13 -> 11.12.13)
+print(ip_proccessing.no_first())
