@@ -24,3 +24,25 @@ ip_proccessing = IpProccessing(ip_adresses)
 Пример
 files_processing = FilesProccessing(file_path, mode)
 """
+
+class IpProccessing:
+    """
+    list of IP addresses to be processed in various ways
+    """
+    def __init__(self, ips):
+       self.ips = ips
+
+    def revers(self):
+        revers_list = []
+        for elem in self.ips:
+            ip = elem.split('.')
+            revers_list.append('.'.join(ip[::-1]))
+        return revers_list
+
+
+ip_adresses = ["10.11.12.13", "10.11.12.14", "10.11.12.15"]
+ip_proccessing = IpProccessing(ip_adresses)
+
+# 1) Получить список IP адресов в развернутом виде
+# (пример 10.11.12.13 -> 13.12.11.10)
+print(ip_proccessing.revers())
