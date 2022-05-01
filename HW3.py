@@ -137,27 +137,28 @@ BTW there is no honor in this solution because I took it from https://tproger.ru
 #        {'name': 'Dmitriy', 'age': 21}]
 # }
 
-print("""
-#2.2 is WRONG
-I don't know why `result[element['city']].append({'name':element['name'], 'age':element['age']})`
-appends to ALL THREE cities, not only to result[element['city']]
-""")
-cities=[]
-for element in data:
-    cities.append(element['city'])
-result = dict.fromkeys(set(cities),[])
-print("---------------")
-print(f"initial result is {result}")
-data_copy = data[:]
-for element in data_copy:
-    print(f"element is {element}")
-    print(f"element['city'] is {element['city']}")
-    print(f"result[element['city']] is {result[element['city']]}")
-    result[element['city']].append({'name':element['name'], 'age':element['age']})
-    data_copy.remove(element)
-    print(f"result is {result}")
-    print(f"-----------------")
-# print(result)
+def group_by_city(data, *args, **kwargs):
+    """
+    To reorganize input dictionary and sort data by city
+    :param data: input dict with defined format
+    :param args: bulk stuff to avoid some troubles
+    :param kwargs: bulk stuff to avoid some troubles
+    :return: dict with cities as keys and element is a list
+    """
+    result = {}
+    for dict in data:
+        city = dict.pop('city')
+        if city in result.keys():
+            result[city].append(dict)
+        else:
+            result.update({city: []})
+            result[city].append(dict)
+    return result
+print(f""" #2.2
+the output is not as pretty as the initial example with all those spaces and indents, but it is the same dictionary;
+2.2 answer is:
+{group_by_city(data)}""")
+
 # 3) У вас есть последовательность строк. Необходимо определить наиболее часто встречающуюся строку в последовательности.
 # most_frequent(['a', 'a', 'bi', 'bi', 'bi']) == 'bi'
 
@@ -248,6 +249,3 @@ print("""#3
 (list output is on purpose; to handle cases with several most often strings)""")
 print(f"#3 with separate function generated input: {most_frequent(third_task_input_generator(4, 8, 3, 6, 4, 5))}")
 print(f"#3 with input from the example: {most_frequent(['a', 'a', 'bi', 'bi', 'bi'])}")
-
-
-
