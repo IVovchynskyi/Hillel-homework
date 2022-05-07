@@ -12,9 +12,11 @@ from time import sleep
 
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
 try :
     driver.get("https://incompetech.com/wordpress/")
+except ZeroDivisionError: # I cannot use else without except (still can finally, but not else)
+    pass
+else:
     sleep(1)
     search_field = '//*[@id="s"]'
     element = driver.find_element(By.XPATH, search_field)
@@ -25,3 +27,4 @@ try :
 finally:
     driver.close()
     driver.quit()
+
