@@ -20,17 +20,22 @@ def add_text2field(Xpath: str, text: str, *args, **kwargs):
     return
 
 
+def wait4it_presence(Xpath: str, wait_time = 10, *args, **kwargs):
+    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, Xpath)))
+    return
+
+
 def login(username: str, password: str, *args, **kwargs):
     login_username = '//*[@id="id_username"]'
     login_password = '//*[@id="id_password"]'
     login_sumit_button = '//*[@id="login-form"]/div[3]/input'
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, login_username)))  # login form is here,so:
+    wait4it_presence(login_username) # login form is here,so:
     add_text2field(Xpath=login_username, text=username)
     add_text2field(Xpath=login_password, text=password)
     element = driver.find_element(By.XPATH, login_sumit_button)
     element.click()
     logged_in_name = '//*[@id="user-tools"]/strong'
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, logged_in_name)))  # it is here so we are in
+    wait4it_presence(logged_in_name) # it is here so we are in
     return
 
 
