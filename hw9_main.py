@@ -62,6 +62,66 @@ def search_by_searchbar(text_to_search: str, *args, **kwargs):
             return found_usernames
 
 
+def create_user(user_dict: dict, *args, **kwargs):
+    """
+    The fuction creates user from USER_LIST_URL = "https://www.aqa.science/admin/auth/user/"
+    :param user_dict: the dictionary of the user's parameters to create
+    if ['Username'] and ['Password'] is NULL - function will return NULL (the user will not be created)
+    if neither ['First name'] nor ['Last name'] nor ['Email address'] is present the user will be created as is
+    if any of these parameters is there - it will be added to the user
+    :return:
+    False if there are no ['Username'] or/and ['Password']
+    user_change_link - the user link
+    """
+    if driver.current_url != USER_LIST_URL:
+        print(f"It is the wrong URL for this function: {driver.current_url} is not {USER_LIST_URL} !")
+        # return
+    elif user_dict['Username'] and user_dict['Password']:
+        on_Users_add_user_xpath = '//*[@id="content-main"]/ul/li/a'
+        # Wait till the button is here
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, on_Users_add_user_xpath)))
+        # the button is here so we can click on it
+        driver.find_element(By.XPATH, on_Users_add_user_xpath).click()
+        # available on the first page
+        user_username_xpath = '//*[@id="id_username"]'
+        user_password_xpath = '//*[@id="id_password1"]'
+        user_confirm_password_xpath = '//*[@id="id_password2"]'
+        user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
+        user_save_and_cont_edit_xpath = '//*[@id="user_form"]/div/div/input[3]'
+        # available on the second page
+        edit_user_firstname_xpath = '//*[@id="id_first_name"]'
+        edit_user_lastname_xpath = '//*[@id="id_last_name"]'
+        edit_user_email_xpath = '//*[@id="id_email"]'
+        edit_user_delete_xpath = '//*[@id="user_form"]/div/div/p/a'
+        # available only after the delete button is pressed
+        edit_user_delete_yes_xpath = '//*[@id="content"]/form/div/input[2]'
+        edit_user_delete_no_xpath = '//*[@id="content"]/form/div/a'
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_username_xpath)))
+        add_text2field(Xpath=user_username_xpath, text=user_dict['Username'])
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_password_xpath)))
+        add_text2field(Xpath=user_password_xpath, text=user_dict['Password'])
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_confirm_password_xpath)))
+        add_text2field(Xpath=user_confirm_password_xpath, text=user_dict['Password'])
+        # let's go to another page; click the SAVE button
+        driver.find_element(By.XPATH, user_save_xpath).click()
+        # it is important o get this link; it is the user link (also the user change link)
+        user_change_link = driver.current_url
+        # if there is any additional info - fill it
+        if user_dict['First name'] or user_dict['Last name'] or user_dict['Email address']:
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_firstname_xpath)))
+            add_text2field(Xpath=edit_user_firstname_xpath, text=user_dict['First name'])
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_lastname_xpath)))
+            add_text2field(Xpath=edit_user_lastname_xpath, text=user_dict['Last name'])
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_email_xpath)))
+            add_text2field(Xpath=edit_user_email_xpath, text=user_dict['Email address'])
+        # let's finish the user creation; click the SAVE button
+        driver.find_element(By.XPATH, user_save_xpath).click()
+        return user_change_link
+    else:
+        print("you don't have username or password filled; the action cannot be processed")
+        return False
+
+
 MAIN_URL = "https://www.aqa.science/admin/login/?next=/admin/"
 USER_LIST_URL = "https://www.aqa.science/admin/auth/user/"
 # Yes, it is bad, I promise not to do such things further
@@ -92,57 +152,14 @@ else:
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, on_Users_add_user_xpath)))
 
     user_to_be_created = {
-        'Username': 'IgorV_testuser_no16',
+        'Username': 'IgorV_testuser_no18',
         'Password': 'Test123!',
-        'First name': 'no16',
+        'First name': '',
         'Last name': '',
         'Email address': ''
     }
 
-
-    if driver.current_url != USER_LIST_URL:
-        print(f"It is the wrong URL for this function: {driver.current_url} is not {USER_LIST_URL} !")
-        # return
-    elif user_to_be_created['Username'] and user_to_be_created['Password']:
-        on_Users_add_user_xpath = '//*[@id="content-main"]/ul/li/a'
-        # Wait till the button is here
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, on_Users_add_user_xpath)))
-        # the button is here so we can click on it
-        driver.find_element(By.XPATH, on_Users_add_user_xpath).click()
-        # available on the first page
-        user_username_xpath = '//*[@id="id_username"]'
-        user_password_xpath = '//*[@id="id_password1"]'
-        user_confirm_password_xpath = '//*[@id="id_password2"]'
-        user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
-        user_save_and_cont_edit_xpath = '//*[@id="user_form"]/div/div/input[3]'
-        # available on the second page
-        edit_user_firstname_xpath = '//*[@id="id_first_name"]'
-        edit_user_lastname_xpath = '//*[@id="id_last_name"]'
-        edit_user_email_xpath = '//*[@id="id_email"]'
-        edit_user_delete_xpath = '//*[@id="user_form"]/div/div/p/a'
-        # available only after the delete button is pressed
-        edit_user_delete_yes_xpath = '//*[@id="content"]/form/div/input[2]'
-        edit_user_delete_no_xpath = '//*[@id="content"]/form/div/a'
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_username_xpath)))
-        add_text2field(Xpath=user_username_xpath, text=user_to_be_created['Username'])
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_password_xpath)))
-        add_text2field(Xpath=user_password_xpath, text=user_to_be_created['Password'])
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, user_confirm_password_xpath)))
-        add_text2field(Xpath=user_confirm_password_xpath, text=user_to_be_created['Password'])
-        # let's go to another page; click the SAVE button
-        driver.find_element(By.XPATH, user_save_xpath).click()
-        # if there is any additional info - fill it
-        if user_to_be_created['First name'] or user_to_be_created['Last name'] or user_to_be_created['Email address']:
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_firstname_xpath)))
-            add_text2field(Xpath=edit_user_firstname_xpath, text=user_to_be_created['First name'])
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_lastname_xpath)))
-            add_text2field(Xpath=edit_user_lastname_xpath, text=user_to_be_created['Last name'])
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, edit_user_email_xpath)))
-            add_text2field(Xpath=edit_user_email_xpath, text=user_to_be_created['Email address'])
-        # let's finish the user creation; click the SAVE button
-        driver.find_element(By.XPATH, user_save_xpath).click()
-    else:
-        print("you don't have username or password filled; the action cannot be processed")
+    print(create_user(user_to_be_created))
 
     sleep(3)
 
