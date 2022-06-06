@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from time import sleep
 
 options = webdriver.ChromeOptions()
@@ -126,6 +126,11 @@ def create_user(user_dict: dict, *args, **kwargs):
         print("you don't have username or password filled; the action cannot be processed")
         return False
 
+def change_user(user_link:str, user_parameters: dict):
+    pass
+
+
+
 MAIN_URL = "https://www.aqa.science/admin/login/?next=/admin/"
 USER_LIST_URL = "https://www.aqa.science/admin/auth/user/"
 # Yes, it is bad, I promise not to do such things further
@@ -156,14 +161,33 @@ else:
     wait4it_presence(on_Users_add_user_xpath)
 
     user_to_be_created = {
-        'Username': 'IgorV_testuser_no19',
+        'Username': 'IgorV_testuser_no20',
         'Password': 'Test123!',
         'First name': '',
         'Last name': '',
         'Email address': ''
     }
 
-    print(create_user(user_to_be_created))
+    # print(create_user(user_to_be_created))
+
+    # user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
+    user_link = 'https://www.aqa.science/admin/auth/user/675ss/change/'
+
+
+
+    # print(driver.current_url)
+
+    try:
+        driver.get(user_link)
+        if driver.current_url != user_link:
+            raise InvalidArgumentException
+    except InvalidArgumentException:
+        print("the wrong page error was catched")
+    else:
+        print("it is fine; continue to do some things")
+    finally:
+        print("in any case the end will come")
+
 
     sleep(3)
 
