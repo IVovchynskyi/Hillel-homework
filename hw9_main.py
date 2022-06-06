@@ -134,7 +134,7 @@ def change_user(user_link: str, user_parameters: dict):
         if driver.current_url != user_link:
             raise InvalidArgumentException
     except InvalidArgumentException:
-        print(f"Something wen wrong: the link {user_link} is invalid")
+        print(f"Something went wrong: the link {user_link} is invalid")
         result = False
     else:
         user_username_xpath = '//*[@id="id_username"]'
@@ -159,7 +159,7 @@ def change_user(user_link: str, user_parameters: dict):
         except NoSuchElementException:
             result = True
         else:
-            print("Something wen wrong: you have entered an invalid parameter; user changes cannot be saved")
+            print("Something went wrong: you have entered an invalid parameter; user changes cannot be saved")
             result = False
     finally:
         driver.get(start_point)
@@ -212,7 +212,8 @@ else:
 
     # print(create_user(user_to_be_created))
 
-    user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
+    # user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
+    user_link = 'https://www.aqa.science/admin/auth/user/675ssss/change/'
 
     print(change_user(user_link=user_link, user_parameters=user_to_be_changed))
 
