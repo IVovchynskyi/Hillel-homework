@@ -129,7 +129,8 @@ def create_user(user_dict: dict, *args, **kwargs):
 
 def change_user(user_link: str, user_parameters: dict):
     """
-
+    the function to change given user parameters; please be informed:
+    at the moment only  username, first name, last name and email are implemented
     :param user_link: the user link allowing to change the user
     :param user_parameters: all the user parameters to be changed
     :return: True if the change was successful and False if it was not
@@ -178,7 +179,26 @@ def change_user(user_link: str, user_parameters: dict):
         return result
 
 def delete_user(user_link: str):
-    pass
+    try:
+        start_point = driver.current_url  # we need to know the initial point; we will go there after all
+        driver.get(user_link)
+        if driver.current_url != user_link:
+            raise InvalidArgumentException
+    except InvalidArgumentException:
+        print(f"Something went wrong: the link {user_link} is invalid")
+        result = False
+    else:
+        user_delete_xpath = '//*[@id="user_form"]/div/div/p/a'
+        user_delete_yes_xpath = '//*[@id="content"]/form/div/input[2]'
+        user_delete_no_xpath = '//*[@id="content"]/form/div/a'
+        wait4it_presence(user_delete_xpath)
+        driver.find_element(By.XPATH, user_delete_xpath).click()
+        wait4it_presence(user_delete_yes_xpath)
+        driver.find_element(By.XPATH, user_delete_yes_xpath).click()
+        result = True
+    finally:
+        driver.get(start_point)
+        return result
 
 
 MAIN_URL = "https://www.aqa.science/admin/login/?next=/admin/"
@@ -222,15 +242,17 @@ else:
         'Username': 'IgorV_testuser_no20',
         'First name': '20first20',
         'Last name': '20last20',
-        'Email address': '###'
+        'Email address': ''
     }
 
-    # print(create_user(user_to_be_created))
 
-    # user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
-    user_link = 'https://www.aqa.science/admin/auth/user/675ssss/change/'
+    user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
+    # user_link = 'https://www.aqa.science/admin/auth/user/675ssss/change/'
 
+    print(create_user(user_to_be_created))
     print(change_user(user_link=user_link, user_parameters=user_to_be_changed))
+
+    print(delete_user(user_link))
 
     sleep(3)
 
