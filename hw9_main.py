@@ -128,6 +128,12 @@ def create_user(user_dict: dict, *args, **kwargs):
 
 
 def change_user(user_link: str, user_parameters: dict):
+    """
+
+    :param user_link: the user link allowing to change the user
+    :param user_parameters: all the user parameters to be changed
+    :return: True if the change was successful and False if it was not
+    """
     try:
         start_point = driver.current_url  # we need to know the initial point; we will go there after all
         driver.get(user_link)
@@ -143,15 +149,21 @@ def change_user(user_link: str, user_parameters: dict):
         user_email_xpath = '//*[@id="id_email"]'
         user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
         error_note = '//*[@id="user_form"]/div/p'
+
         if user_parameters['Username']:
+            wait4it_presence(user_username_xpath)
             add_text2field(Xpath=user_username_xpath, text=user_parameters['Username'])
         if user_parameters['First name']:
+            wait4it_presence(user_firstname_xpath)
             add_text2field(Xpath=user_firstname_xpath, text=user_parameters['First name'])
         if user_parameters['Last name']:
+            wait4it_presence(user_lastname_xpath)
             add_text2field(Xpath=user_lastname_xpath, text=user_parameters['Last name'])
         if user_parameters['Email address']:
+            wait4it_presence(user_email_xpath)
             add_text2field(Xpath=user_email_xpath, text=user_parameters['Email address'])
         # we need to save the changes
+        wait4it_presence(user_save_xpath)
         driver.find_element(By.XPATH, user_save_xpath).click()
         # but something might go wrong
         try:
@@ -164,6 +176,9 @@ def change_user(user_link: str, user_parameters: dict):
     finally:
         driver.get(start_point)
         return result
+
+def delete_user(user_link: str):
+    pass
 
 
 MAIN_URL = "https://www.aqa.science/admin/login/?next=/admin/"
