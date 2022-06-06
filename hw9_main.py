@@ -20,7 +20,7 @@ def add_text2field(Xpath: str, text: str, *args, **kwargs):
     return
 
 
-def wait4it_presence(Xpath: str, wait_time = 10, *args, **kwargs):
+def wait4it_presence(Xpath: str, wait_time=10, *args, **kwargs):
     WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, Xpath)))
     return
 
@@ -29,13 +29,13 @@ def login(username: str, password: str, *args, **kwargs):
     login_username = '//*[@id="id_username"]'
     login_password = '//*[@id="id_password"]'
     login_sumit_button = '//*[@id="login-form"]/div[3]/input'
-    wait4it_presence(login_username) # login form is here,so:
+    wait4it_presence(login_username)  # login form is here,so:
     add_text2field(Xpath=login_username, text=username)
     add_text2field(Xpath=login_password, text=password)
     element = driver.find_element(By.XPATH, login_sumit_button)
     element.click()
     logged_in_name = '//*[@id="user-tools"]/strong'
-    wait4it_presence(logged_in_name) # it is here so we are in
+    wait4it_presence(logged_in_name)  # it is here so we are in
     return
 
 
@@ -52,7 +52,7 @@ def search_by_searchbar(text_to_search: str, *args, **kwargs):
         on_users_search_xpath = '//*[@id="searchbar"]'
         wait4it_presence(on_users_search_xpath)
         add_text2field(Xpath=on_users_search_xpath, text=text_to_search)
-        driver.find_element(By.XPATH, on_users_search_xpath).send_keys(Keys.ENTER) # need to submit the search
+        driver.find_element(By.XPATH, on_users_search_xpath).send_keys(Keys.ENTER)  # need to submit the search
         try:
             on_users_search_table_body_xpath = '//*[@id="result_list"]/tbody'
             driver.find_element(By.XPATH, on_users_search_table_body_xpath)
@@ -126,9 +126,44 @@ def create_user(user_dict: dict, *args, **kwargs):
         print("you don't have username or password filled; the action cannot be processed")
         return False
 
-def change_user(user_link:str, user_parameters: dict):
-    pass
 
+def change_user(user_link: str, user_parameters: dict):
+    try:
+        start_point = driver.current_url  # we need to know the initial point; we will go there after all
+        driver.get(user_link)
+        if driver.current_url != user_link:
+            raise InvalidArgumentException
+    except InvalidArgumentException:
+        print(f"Something wen wrong: the link {user_link} is invalid")
+        result = False
+    else:
+        user_username_xpath = '//*[@id="id_username"]'
+        user_firstname_xpath = '//*[@id="id_first_name"]'
+        user_lastname_xpath = '//*[@id="id_last_name"]'
+        user_email_xpath = '//*[@id="id_email"]'
+        user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
+        error_note = '//*[@id="user_form"]/div/p'
+        if user_parameters['Username']:
+            add_text2field(Xpath=user_username_xpath, text=user_parameters['Username'])
+        if user_parameters['First name']:
+            add_text2field(Xpath=user_firstname_xpath, text=user_parameters['First name'])
+        if user_parameters['Last name']:
+            add_text2field(Xpath=user_lastname_xpath, text=user_parameters['Last name'])
+        if user_parameters['Email address']:
+            add_text2field(Xpath=user_email_xpath, text=user_parameters['Email address'])
+        # we need to save the changes
+        driver.find_element(By.XPATH, user_save_xpath).click()
+        # but something might go wrong
+        try:
+            driver.find_element(By.XPATH, error_note)
+        except NoSuchElementException:
+            result = True
+        else:
+            print("Something wen wrong: you have entered an invalid parameter; user changes cannot be saved")
+            result = False
+    finally:
+        driver.get(start_point)
+        return result
 
 
 MAIN_URL = "https://www.aqa.science/admin/login/?next=/admin/"
@@ -168,26 +203,18 @@ else:
         'Email address': ''
     }
 
+    user_to_be_changed = {
+        'Username': 'IgorV_testuser_no20',
+        'First name': '20first20',
+        'Last name': '20last20',
+        'Email address': '###'
+    }
+
     # print(create_user(user_to_be_created))
 
-    # user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
-    user_link = 'https://www.aqa.science/admin/auth/user/675ss/change/'
+    user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
 
-
-
-    # print(driver.current_url)
-
-    try:
-        driver.get(user_link)
-        if driver.current_url != user_link:
-            raise InvalidArgumentException
-    except InvalidArgumentException:
-        print("the wrong page error was catched")
-    else:
-        print("it is fine; continue to do some things")
-    finally:
-        print("in any case the end will come")
-
+    print(change_user(user_link=user_link, user_parameters=user_to_be_changed))
 
     sleep(3)
 
