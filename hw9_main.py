@@ -75,32 +75,29 @@ def create_user(user_dict: dict, *args, **kwargs):
     if neither ['First name'] nor ['Last name'] nor ['Email address'] is present the user will be created as is
     if any of these parameters is there - it will be added to the user
     :return:
+    False if the fuction was used not from the USER_LIST_URL
     False if there are no ['Username'] or/and ['Password']
-    user_change_link - the user link
+    user_change_link - the user link - if the creation was succesfull
     """
     if driver.current_url != USER_LIST_URL:
         print(f"It is the wrong URL for this function: {driver.current_url} is not {USER_LIST_URL} !")
-        # return
+        return False
     elif user_dict['Username'] and user_dict['Password']:
         on_Users_add_user_xpath = '//*[@id="content-main"]/ul/li/a'
-        # Wait till the button is here
         wait4it_presence(on_Users_add_user_xpath)
-        # the button is here so we can click on it
         driver.find_element(By.XPATH, on_Users_add_user_xpath).click()
         # available on the first page
         user_username_xpath = '//*[@id="id_username"]'
         user_password_xpath = '//*[@id="id_password1"]'
         user_confirm_password_xpath = '//*[@id="id_password2"]'
         user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
-        user_save_and_cont_edit_xpath = '//*[@id="user_form"]/div/div/input[3]'
+        user_save_and_cont_edit_xpath = '//*[@id="user_form"]/div/div/input[3]'  # unfortunately useless now
         # available on the second page
         edit_user_firstname_xpath = '//*[@id="id_first_name"]'
         edit_user_lastname_xpath = '//*[@id="id_last_name"]'
         edit_user_email_xpath = '//*[@id="id_email"]'
-        edit_user_delete_xpath = '//*[@id="user_form"]/div/div/p/a'
-        # available only after the delete button is pressed
-        edit_user_delete_yes_xpath = '//*[@id="content"]/form/div/input[2]'
-        edit_user_delete_no_xpath = '//*[@id="content"]/form/div/a'
+        # the error note
+        error_note_xpath = '//*[@id="user_form"]/div/p'
         wait4it_presence(user_username_xpath)
         add_text2field(Xpath=user_username_xpath, text=user_dict['Username'])
         wait4it_presence(user_password_xpath)
@@ -109,6 +106,7 @@ def create_user(user_dict: dict, *args, **kwargs):
         add_text2field(Xpath=user_confirm_password_xpath, text=user_dict['Password'])
         # let's go to another page; click the SAVE button
         driver.find_element(By.XPATH, user_save_xpath).click()
+
         # it is important o get this link; it is the user link (also the user change link)
         user_change_link = driver.current_url
         # if there is any additional info - fill it
@@ -127,7 +125,7 @@ def create_user(user_dict: dict, *args, **kwargs):
         return False
 
 
-def change_user(user_link: str, user_parameters: dict):
+def change_user(user_link: str, user_parameters: dict, *args, **kwargs):
     """
     the function to change given user parameters; please be informed:
     at the moment only  username, first name, last name and email are implemented
@@ -149,7 +147,7 @@ def change_user(user_link: str, user_parameters: dict):
         user_lastname_xpath = '//*[@id="id_last_name"]'
         user_email_xpath = '//*[@id="id_email"]'
         user_save_xpath = '//*[@id="user_form"]/div/div/input[1]'
-        error_note = '//*[@id="user_form"]/div/p'
+        error_note_xpath = '//*[@id="user_form"]/div/p'
 
         if user_parameters['Username']:
             wait4it_presence(user_username_xpath)
@@ -168,7 +166,7 @@ def change_user(user_link: str, user_parameters: dict):
         driver.find_element(By.XPATH, user_save_xpath).click()
         # but something might go wrong
         try:
-            driver.find_element(By.XPATH, error_note)
+            driver.find_element(By.XPATH, error_note_xpath)
         except NoSuchElementException:
             result = True
         else:
@@ -178,7 +176,47 @@ def change_user(user_link: str, user_parameters: dict):
         driver.get(start_point)
         return result
 
-def delete_user(user_link: str):
+
+def read_user(user_link: str, *args, **kwargs):
+    """
+    the function to get user parameter via the user link
+    :param user_link: the user link allowing to change the user
+    :return: dict with following user parameters Username, First name, Last name and Email address
+    """
+    try:
+        start_point = driver.current_url  # we need to know the initial point; we will go there after all
+        driver.get(user_link)
+        if driver.current_url != user_link:
+            raise InvalidArgumentException
+    except InvalidArgumentException:
+        print(f"Something went wrong: the link {user_link} is invalid")
+        return False
+    else:
+        result = dict.fromkeys(['Username', 'First name','Last name','Email address'])
+        user_username_xpath = '//*[@id="id_username"]'
+        user_firstname_xpath = '//*[@id="id_first_name"]'
+        user_lastname_xpath = '//*[@id="id_last_name"]'
+        user_email_xpath = '//*[@id="id_email"]'
+
+        wait4it_presence(user_username_xpath)
+        result['Username'] = driver.find_element(By.XPATH, user_username_xpath).get_attribute("value")
+        # print(driver.find_element(By.XPATH, user_username_xpath).text())
+        wait4it_presence(user_firstname_xpath)
+        result['First name'] = driver.find_element(By.XPATH, user_firstname_xpath).get_attribute("value")
+        wait4it_presence(user_lastname_xpath)
+        result['Last name'] = driver.find_element(By.XPATH, user_lastname_xpath).get_attribute("value")
+        # print(driver.find_element(By.XPATH, user_lastname_xpath).text())
+        wait4it_presence(user_email_xpath)
+        result['Email address'] = driver.find_element(By.XPATH, user_email_xpath).get_attribute("value")
+        # print(driver.find_element(By.XPATH, user_email_xpath).text())
+
+        return result
+
+    finally:
+        driver.get(start_point)
+
+
+def delete_user(user_link: str, *args, **kwargs):
     try:
         start_point = driver.current_url  # we need to know the initial point; we will go there after all
         driver.get(user_link)
@@ -231,7 +269,7 @@ else:
     wait4it_presence(on_Users_add_user_xpath)
 
     user_to_be_created = {
-        'Username': 'IgorV_testuser_no20',
+        'Username': 'IgorV_testuser_no29',
         'Password': 'Test123!',
         'First name': '',
         'Last name': '',
@@ -239,22 +277,32 @@ else:
     }
 
     user_to_be_changed = {
-        'Username': 'IgorV_testuser_no20',
-        'First name': '20first20',
-        'Last name': '20last20',
-        'Email address': ''
+        'Username': 'IgorV_testuser_no29',
+        'First name': 'first265',
+        'Last name': 'last265',
+        'Email address': 'email265@mail.com'
     }
 
 
-    user_link = 'https://www.aqa.science/admin/auth/user/675/change/'
-    # user_link = 'https://www.aqa.science/admin/auth/user/675ssss/change/'
 
-    print(create_user(user_to_be_created))
-    print(change_user(user_link=user_link, user_parameters=user_to_be_changed))
+    # checking that there are no such user before the creation
+    assert search_by_searchbar(text_to_search=user_to_be_created['Username']) == False, "Rough search has found the " \
+                                                                                        "user, need to abort user " \
+    # creating the user and the variable with the user link in the same time
+    user_link = create_user(user_to_be_created)
+    # checking that the user was created
+    assert search_by_searchbar(text_to_search=user_to_be_changed['Username']), "No user found, so user creation was unsuccessful"
+    # changing the user
+    change_user(user_link=user_link, user_parameters=user_to_be_changed)
+    # checking that the user was changed according to the input dictionary
+    assert read_user(user_link) == user_to_be_changed, "changing input and obtained does not match"
+    # deleting the user
+    delete_user(user_link=user_link)
+    # checking that the user was deleted
+    assert search_by_searchbar(text_to_search=user_to_be_created['Username']) == False, "Rough search has found the " \
+                                                                                        "user,  so user deleting was " \
+                                                                                        "unsuccessful "
 
-    print(delete_user(user_link))
-
-    sleep(3)
 
 finally:
     driver.close()
